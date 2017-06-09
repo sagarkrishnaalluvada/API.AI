@@ -1,0 +1,342 @@
+'use strict';
+const functions = require('firebase-functions');
+
+const admin = require('firebase-admin');
+admin.initializeApp(functions.config().firebase);
+const express = require('express');
+const bodyParser = require('body-parser');
+
+
+const restService = express();
+restService.use(bodyParser.json());
+
+restService.post('/hook', function (req, res) {
+
+    console.log('hook request');
+    
+
+    try {
+
+        var speech = 'empty speech';
+         let key=[],answers=[], dataVal=[],hehe=[];
+         var qq;
+          
+       
+        if (req.body) {
+            var requestBody = req.body;
+            // constam
+            console.log(requestBody.result.metadata.intentName);
+          var w=requestBody.result.contexts;
+        var  wq,mn;
+          var abc =requestBody.result.fulfillment.speech;
+          //var hehe =requestBody.contexts;
+         
+            console.log('request is:',requestBody.result);
+           
+        console.log('parameters are:',requestBody.result.parameters);
+      
+        
+        console.log('result is: ', speech);
+        
+            if(requestBody.result.action=="signup") {
+                 wq =w[0].parameters.facebook_sender_id;
+           console.log('fb context is:',wq);
+
+               var original={
+              fbid:wq,
+               params :requestBody.result.parameters
+              }
+           admin.database().ref('/messages').push({original: original}).then(snapshot => {
+    // Redirect with 303 SEE OTHER to the URL of the pushed object in the Firebase console.
+   // res.redirect(303, snapshot.ref);
+  });
+  }
+    if(requestBody.result.action=="checkout") {
+         wq =w[0].parameters.facebook_sender_id;
+           console.log('fb context is:',wq);
+
+        var original={
+              fbid:wq,
+               params :requestBody.result.parameters
+              }
+         admin.database().ref('/orders').push({checkout: original}).then(snapshot => {
+    // Redirect with 303 SEE OTHER to the URL of the pushed object in the Firebase console.
+   // res.redirect(303, snapshot.r
+  });
+  }
+    if(requestBody.result.metadata.intentName=="dress")
+    {   var  we;
+   // var  we=requestBody.result.fulillmenessa;
+       mn=requestBody.result.metadata.intentName;    
+         
+        admin.database().ref('/users/'+mn).once('value').then(snapshot => {
+    // Redirect with 303 SEE OTHER to the URL of the pushed object in the Firebase console.
+    //abc.push(snapshot.value);   
+    console.log('eeee',snapshot.val());
+       console.log('eeee',snapshot.val());
+      key = Object.keys(snapshot.val())[0];
+         console.log( "key",Object.keys(snapshot.val()));
+         dataVal=snapshot.val();  
+        console.log('dv',dataVal); 
+          we = dataVal[key];
+         console.log('we ', we );
+     }); 
+             console.log('11 ' );
+       let finalResponse=  res.json({
+          // speech:"ac",
+      messages: [
+        {
+          "type": 3,
+          "platform": "facebook",
+          "imageUrl":"http://dazzlingbelle.com/wp-content/uploads/2013/07/Indian-Fusion-Wear-4.jpg"
+        },
+         {
+          "type": 3,
+          "platform": "facebook",
+          "imageUrl":"https://sc02.alicdn.com/kf/UT8tZZFXslaXXagOFbXw/Designer-kids-wear-coffee-Gown-Surat-style.jpg_350x350.jpg"
+        },
+         {
+          "type": 3,
+          "platform": "facebook",
+          "imageUrl":"https://s-media-cache-ak0.pinimg.com/236x/ed/6b/ac/ed6bac6e3e7d44ef571e969cf2a74043.jpg"
+        }
+    
+          ],
+    
+         displayText:speech,
+            source: 'apiai-webhook-sample',
+           // conteu: [{"name":" "lifespan":2, resetContexts:true,"parameters":{"key":key}}]
+        });
+    console.log(finalResponse.toString());
+    return finalResponse;
+    }
+    
+  
+             if(requestBody.result.metadata.intentName=="fashion")
+    {   var  we;
+   // var  we=requestBody.result.fulillmenessa;
+       mn=requestBody.result.metadata.intentName;    
+         
+        admin.database().ref('/users/'+mn).once('value').then(snapshot => {
+    // Redirect with 303 SEE OTHER to the URL of the pushed 
+    //abc.push(snapshotlue);   
+    console.log('eeee',snapshot.val());
+       console.log('eeee',snapshot.val());
+      key = Object.keys(snapshot.val())[0];
+         console.log( "key",Object.keys(snapshot.val()));
+         dataVal=snapshot.val();  
+        console.log('dv',dataVal); 
+          we = dataVal[key];
+         console.log('we ', we );
+     }); 
+             console.log('11 ' );
+       let finalResponse=  res.json({
+          // speech:"ac",
+      messages: [
+        {
+          "type": 3,
+          "platform": "facebook",
+          "imageUrl":"https://ak0.scstatic.net/1/cdn2-cont9.sweetcouch.com/144801393785270323-shyamal-bhumika-replica-gown-iijw.png"
+        },
+         {
+          "type": 3,
+          "platform": "facebook",
+          "imageUrl":"https://s-media-cache-ak0.pinimg.com/236x/32/c5/0e/32c50e15f4824c440d0e206cd294d64d.jpg"
+        },
+        
+          {
+          "type": 4,
+          "platform": "facebook",
+          "payload": {
+            "facebook": {
+              "attachment": {
+                "type": "video",
+                "payload": {
+                  "url": "https://r18---sn-cvh7kn76.googlevideo.com/videoplayback?ip=209.205.207.210&source=youtube&sparams=dur,ei,expire,id,initcwndbps,ip,ipbits,itag,lmt,mime,mip,mm,mn,ms,mv,pl,ratebypass,requiressl,source&id=o-AKpGx1BEi-PTTPIQFXa-O1SxL1FsE8v3BTHWVNwYD6IT&mime=video/mp4&pl=20&ei=vVk6WfmHD4m78wTko7-AAQ&signature=F473C8786393B1945487615EE40C7480841D01.587B67B84CC6252CDEA22E854D243206058BA4ED&requiressl=yes&lmt=1477824863084766&ratebypass=yes&itag=22&dur=750.747&ipbits=0&key=cms1&expire=1497017885&title=(JioWap.Com)_HOW_TO_MAKE_CREATIVE_DESIGNER_BLOUSE_STEP_BY_STEP_EASY_MAKING&mip=125.62.194.42&redirect_counter=1&cm2rm=sn-8va-8u1e7l&req_id=759f5e262025a3ee&cms_redirect=yes&mm=30&mn=sn-cvh7kn76&ms=nxu&mt=1496996193&mv=m"
+                }
+              }
+            }
+          }
+        }
+    
+          ],
+    
+         displayText:speech,
+            source: 'apiai-webhook-sample',
+           // conteu: [{"name":" "lifespan":2, resetContexts:true,"parameters":{"key":key}}]
+        });
+    console.log(finalResponse.toString());
+    return finalResponse;
+    }
+       
+    if(requestBody.result.metadata.intentName=="payment"||"return"||"track "||"Shipping"||"customer") {
+             console.log('paymeny-past ',speech);
+            mn=requestBody.result.metadata.intentName;
+            console.log('mn ',mn);
+           admin.database().ref('/users/'+mn).once('value').then(snapshot => {
+    // Redirect with 303 SEE OTHER to the URL of the pushed object in the Firebase console.
+    //abc.push(snapshot.value);   
+     console.log('eeee',snapshot.val());
+       console.log('eeee',snapshot.val());                 
+      key = Object.keys(snapshot.val())[0];
+         console.log( "key",Object.keys(snapshot.val()));
+         dataVal=snapshot.val();  
+        console.log('dv',dataVal);   
+          speech = dataVal[key];
+         console.log('answer ', answers );
+      //   let Q_no=Object.keys(answers);
+       //  speech=answers[Object.keys(answers)[0
+     console.log('speech ', speech ); 
+         return res.json({
+           speech:speech,
+         displayText:speech,
+            source: 'apiai-webhook-sample',
+           // contextOut: [{"name":"Js-questions", "lifespan":2, resetContexts:true,"parameters":{"key":key}}]
+        });
+         
+        }); 
+     
+}  
+
+    if (requestBody.result.action!="questions" )
+              {
+                 
+            
+             if (requestBody.result.fulfillment) {
+                   speech += requestBody.result.fulfillment.speech;
+                   speech += ' ';
+             }
+
+              if (requestBody.result.action) {
+                 speech += 'action: ' + requestBody.result.action;
+              }
+                     
+          } 
+             
+    if(requestBody.result.action=="questions") {
+          //  console.log('past abc ',abc );
+             console.log('past ',speech);
+             wq =w[0].parameters.facebook_sender_id;
+           console.log('fb context is:',wq);
+
+            
+           admin.database().ref('/answers').limitToFirst(1).once('value').then(snapshot => {
+    // Redirect with 303 SEE OTHER to the URL of the pushed object in the Firebase console.
+    //abc.push(snapshot.value);   
+     console.log('eeee',snapshot.val());
+      key = Object.keys(snapshot.val())[0];
+         console.log( "key",Object.keys(snapshot.val()));
+         dataVal=snapshot.val();  
+        console.log('dv',dataVal);   
+          answers = dataVal[key];
+         console.log('answer ', answers );
+      //   let Q_no=Object.keys(answers);
+         speech=answers[Object.keys(answers)[0]];
+     console.log('speech ', speech ); 
+        console.log('final request is:',requestBody);
+        console.log('final contextis :',requestBody.result.contexts);
+         w =requestBody.result.contexts;
+        //  wq =w[0].parameters.facebook_sender_id;
+        //    console.log('fb context is:',wq);
+       
+     
+    //     console.log('wq: ', wq );
+     qq =w[0].parameters.ans;
+         console.log('qq: ', qq );
+        hehe = {
+                key :key,
+             facebook_sender_id:wq,
+            ans:qq
+         }
+    
+         console.log('hehe ', hehe);          
+         admin.database().ref('/answers/'+key).push({hehe}).then(snapshot => {
+    // Redirect with 303 SEE OTHER to the URL of the pushed object in the Firebase console.
+   // res.redirect(303, snapshot.ref);
+ 
+    }); 
+    
+      
+         return res.json({
+           speech:speech,
+         displayText:speech,
+            source: 'apiai-webhook-sample',
+            contextOut: [{"name":"Js-questions", "lifespan":2, resetContexts:true,"parameters":{"key":key}}]
+        });
+         
+        }); 
+     
+      
+      
+      /*
+      else{
+        admin.database().ref('/answers').startAt(wq).endAt("-KlNmisuo4tlw0pKldG2").limitToFirst(1).once('value').then(snapshot => {
+    // Redirect with 303 SEE OTHER to the URL of the pushed object in the Firebase console.
+    //abc.push(sdasfdger);
+     console.log('eeee',snapshot.val());
+     let key = Object.keys(snapshot.val())[0];
+         console.log( "key",Object.keys(snapshot.val()));
+        let dataVal=snapshot.val();
+        console.log('dv',dataVal);
+         let answers = dataVal[key];
+         console.log('answer ', answers );
+      //   let Q_no=Object.keys(answers);
+         speech=answers[Object.keys(answers)[0]];
+     console.log('speech ', speech );
+        console.log('final request is:',requestBody);
+        console.log('final contextis :',requestBody.result.contexts);
+       var w =requestBody.result.contexts;
+      var wq =w[0].parameters.key;
+         console.log('wq: ', wq );
+        var qq =w[0].parameters.ans;
+         console.log('qq: ', qq );
+        let hehe = {
+                key :wq,
+            answers: qq
+         }
+    
+         console.log('hehe ', hehe);          
+         admin.database().ref('/answers/'+key).push({hehe}).then(snapshot => {
+    // Redirect with 303 SEE OTHER to the URL of the pushed object in the Firebase console.
+   // res.redirect(303, snapshot.ref);
+ 
+    }); 
+         return res.json({
+           speech:speech,
+         displayText:speech,
+            source: 'apiai-webhook-sample',
+            contextOut: [{"name":"Js-questions", "lifespan":2, "parameters":{"key":key}}]
+        });
+         
+
+        });
+     
+} 
+*/
+}
+     
+       
+    } 
+}
+
+    catch (err) {
+        console.error("Can't process request", err);
+
+        return res.status(400).json({
+            status: {
+                code: 400,
+                errorType: err.message
+            }
+        });
+    }
+    
+    
+});
+
+
+restService.listen((process.env.PORT || 5000), function () {
+    console.log("Server listening 1234");
+});
+
+exports.app = functions.https.onRequest(restService);
+
